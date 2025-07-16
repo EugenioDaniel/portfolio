@@ -39,4 +39,8 @@ $(function alCargarLaPagina() {
     setInterval(actualizarHoraBarraTareas, 1000);
     actualizarHoraBarraTareas();
 
+    $("#btn-pantalla-completa-2").click(function () {
+        alternarPantallaCompleta()
+    });
+
 });
