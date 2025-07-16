@@ -1,0 +1,35 @@
+#btn-pantalla-completa {
+    position: absolute;
+    top: 1vh;
+}
+
+.popup {
+    position: sticky;
+    width: max-content;
+    padding: 1vh 1vh 1vh 1.5vh;
+    height: min-content;
+    z-index: 10;
+    color: var(--almost_white);
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    opacity: 0.9;
+    border-radius: 0.8rem 0.8rem 0.8rem 0.8rem;
+    margin-left: 0;
+}
+
+.popup div {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.popup i {
+    font-size: 2.5vh;
+}
+
+.popup span {
+    margin-left: 1vh;
+    align-self: center;
+    font-weight: bold;
+}
