@@ -195,6 +195,27 @@ $(function () {
             let w = Math.abs(e.pageX - startX);
             let h = Math.abs(e.pageY - startY);
             $selectionBox.css({ left: x, top: y, width: w, height: h });
+
+            // Selección dinámica de apps mientras arrastras
+            const boxLeft = x;
+            const boxTop = y;
+            const boxRight = x + w;
+            const boxBottom = y + h;
+
+            $("." + app_STR).each(function () {
+                const $app = $(this);
+                const offset = $app.offset();
+                const left = offset.left;
+                const top = offset.top;
+                const right = left + $app.width();
+                const bottom = top + $app.height();
+
+                if (right > boxLeft && left < boxRight && bottom > boxTop && top < boxBottom) {
+                    $app.addClass(selected_STR);
+                } else {
+                    $app.removeClass(selected_STR);
+                }
+            });
         }
     });
 
