@@ -24,11 +24,12 @@ function alternarPantallaCompleta() {
 
 $(function alCargarLaPagina() {
     const pantallaCarga = document.getElementById("pantalla-carga");
-    if (pantallaCarga) {
-        pantallaCarga.style.transition = "opacity 0.5s ease";
+    pantallaCarga.style.opacity = "1";
+    setTimeout(() => {
+        pantallaCarga.style.transition = "opacity 1s ease";
         pantallaCarga.style.opacity = "0";
         setTimeout(() => {
             pantallaCarga.style.display = "none";
-        }, 500);
-    }
+        }, 1000); // Espera a que termine la transición
+    }, 2000); // Espera 2 segundos antes de iniciar la transición
 });

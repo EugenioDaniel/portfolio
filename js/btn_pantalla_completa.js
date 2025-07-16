@@ -4,7 +4,7 @@ $(function alCargarLaPagina() {
 
     function esconderBtnPantallaCompleta() {
         $(pantallaCompleta_STR).css("transition", "transform 0.6s");
-        $(pantallaCompleta_STR).fadeOut(300);
+        $(pantallaCompleta_STR).fadeOut(1000);
         $(pantallaCompleta_STR).css("transform", "translateY(-5vh)");
     }
 
