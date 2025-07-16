@@ -25,7 +25,6 @@ $(function () {
         $("." + app_STR).removeClass(selected_STR);
         setTimeout(() => {
             app.addClass(selected_STR);
-            console.log("Clase selected asignada después de un retraso");
         }, 50);
     }
 
@@ -164,24 +163,20 @@ $(function () {
                 if (puedeMover && celdasDestino.length === appsOrdenadas.length) {
                     for (let i = 0; i < appsOrdenadas.length; i++) {
                         $(appsOrdenadas[i]).detach().css({ top: 0, left: 0 }).appendTo(celdasDestino[i]);
-                        console.log("Añadido.")
                     }
                 } else {
                     // Si no se pueden mover todas, ajustar la app arrastrada al grid
                     const $celdaOriginal = $todasCeldas.eq($todasCeldas.index($icono.parent()));
                     $icono.detach().css({ top: 0, left: 0 }).appendTo($celdaOriginal);
-                    console.log("Añadido.")
                 }
             } else {
                 // Solo una app, pero solo la mueves si la celda destino está vacía
                 if ($celdaDestino.is(":empty")) {
                     $icono.detach().css({ top: 0, left: 0 }).appendTo($celdaDestino);
-                    console.log("Añadido.")
                 } else {
                     // Ajustar la app al grid en su posición original
                     const $celdaOriginal = $todasCeldas.eq($todasCeldas.index($icono.parent()));
                     $icono.detach().css({ top: 0, left: 0 }).appendTo($celdaOriginal);
-                    console.log("Añadido.")
                 }
             }
         }
@@ -356,7 +351,6 @@ $(function () {
                 // Si el app está dentro del rectángulo de selección
                 if (right > boxLeft && left < boxRight && bottom > boxTop && top < boxBottom) {
                     $app.addClass(selected_STR);
-                    console.log("pasa por aquiiiiiiiiiii")
                 }
             });
 
