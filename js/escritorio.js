@@ -23,7 +23,10 @@ $(function () {
 
     function seleccionarApp(app) {
         $("." + app_STR).removeClass(selected_STR);
-        app.addClass(selected_STR);
+        setTimeout(() => {
+            app.addClass(selected_STR);
+            console.log("Clase selected asignada después de un retraso");
+        }, 50);
     }
 
     // Crear celdas
@@ -55,21 +58,132 @@ $(function () {
         containment: escritorio_STR,
         zIndex: 100,
         start: function () {
-            seleccionarApp($(this));
+            //seleccionarApp($(this));
+            // Si hay varias seleccionadas, marcar todas como "dragging"
+            if ($("." + app_STR + ".selected").length > 1) {
+                $("." + app_STR + ".selected").addClass("dragging-multiple");
+            } else {
+                // Si solo hay una app seleccionada, no hacer nada
+                if ($(this).hasClass(selected_STR)) {
+                    return;
+                } else {
+                    // Si no hay ninguna seleccionada, seleccionar esta
+                    seleccionarApp($(this));
+                }
+            }
+        },
+        stop: function () {
+            $("." + app_STR).removeClass("dragging-multiple");
         }
     });
 
     // Hacer celdas droppable
     $(".celda").droppable({
         accept: function (draggable) {
-            return draggable.hasClass(app_STR) && $(this).is(":empty");
+            return draggable.hasClass(app_STR);
         },
         hoverClass: "destino",
         tolerance: "pointer",
         drop: function (event, ui) {
             const $celdaDestino = $(this);
             const $icono = ui.draggable;
-            $icono.detach().css({ top: 0, left: 0 }).appendTo($celdaDestino);
+            const $seleccionadas = $("." + app_STR + ".selected");
+            const $todasCeldas = $(".celda");
+
+            if ($seleccionadas.length > 1) {
+                const $todasCeldas = $(".celda");
+                const columnas = Math.ceil(Math.sqrt($todasCeldas.length));
+
+                let appsOrdenadas = $seleccionadas.toArray().sort(function (a, b) {
+                    let idxA = $todasCeldas.index($(a).parent()[0]);
+                    let idxB = $todasCeldas.index($(b).parent()[0]);
+                    return idxA - idxB;
+                });
+
+                let indicesOriginales = appsOrdenadas.map(function (app) {
+                    return $todasCeldas.index($(app).parent());
+                });
+
+                let minIdx = Math.min(...indicesOriginales);
+                let minRow = Math.floor(minIdx / columnas);
+                let minCol = minIdx % columnas;
+
+                let destinoIdx = $todasCeldas.index($celdaDestino);
+                let destinoRow = Math.floor(destinoIdx / columnas);
+                let destinoCol = destinoIdx % columnas;
+
+                let celdasDestino = [];
+                let indicesDestino = [];
+                let puedeMover = true;
+
+                // Calcular celdas destino y comprobar que no se repiten
+                let destinoSet = new Set();
+                for (let i = 0; i < appsOrdenadas.length; i++) {
+                    let idx = indicesOriginales[i];
+                    let row = Math.floor(idx / columnas);
+                    let col = idx % columnas;
+                    let relRow = row - minRow;
+                    let relCol = col - minCol;
+                    let nuevaRow = destinoRow + relRow;
+                    let nuevaCol = destinoCol + relCol;
+                    let nuevoIdx = nuevaRow * columnas + nuevaCol;
+
+                    // Si ya hay una app que va a esa celda, no se puede mover
+                    if (destinoSet.has(nuevoIdx)) {
+                        puedeMover = false;
+                        break;
+                    }
+                    destinoSet.add(nuevoIdx);
+
+                    indicesDestino.push(nuevoIdx);
+
+                    let $nuevaCelda = $todasCeldas.eq(nuevoIdx);
+                    if ($nuevaCelda.length === 0) {
+                        puedeMover = false;
+                        break;
+                    }
+                    celdasDestino.push($nuevaCelda);
+                }
+
+                // Comprobar que ninguna celda destino (excepto las originales) esté ocupada por una app que no se está moviendo
+                if (puedeMover) {
+                    for (let i = 0; i < celdasDestino.length; i++) {
+                        let $celda = celdasDestino[i];
+                        // Si la celda destino no es una de las originales y está ocupada, no se puede mover
+                        if (
+                            !indicesOriginales.includes(indicesDestino[i]) &&
+                            $celda.children("." + app_STR).length > 0
+                        ) {
+                            puedeMover = false;
+                            break;
+                        }
+                    }
+                }
+
+                // Si todas las celdas destino son válidas, mover
+                if (puedeMover && celdasDestino.length === appsOrdenadas.length) {
+                    for (let i = 0; i < appsOrdenadas.length; i++) {
+                        $(appsOrdenadas[i]).detach().css({ top: 0, left: 0 }).appendTo(celdasDestino[i]);
+                        console.log("Añadido.")
+                    }
+                } else {
+                    // Si no se pueden mover todas, ajustar la app arrastrada al grid
+                    const $celdaOriginal = $todasCeldas.eq($todasCeldas.index($icono.parent()));
+                    $icono.detach().css({ top: 0, left: 0 }).appendTo($celdaOriginal);
+                    console.log("Añadido.")
+                }
+            } else {
+                // Solo una app, pero solo la mueves si la celda destino está vacía
+                if ($celdaDestino.is(":empty")) {
+                    $icono.detach().css({ top: 0, left: 0 }).appendTo($celdaDestino);
+                    console.log("Añadido.")
+                } else {
+                    // Ajustar la app al grid en su posición original
+                    const $celdaOriginal = $todasCeldas.eq($todasCeldas.index($icono.parent()));
+                    $icono.detach().css({ top: 0, left: 0 }).appendTo($celdaOriginal);
+                    console.log("Añadido.")
+                }
+            }
         }
     });
 
@@ -242,6 +356,7 @@ $(function () {
                 // Si el app está dentro del rectángulo de selección
                 if (right > boxLeft && left < boxRight && bottom > boxTop && top < boxBottom) {
                     $app.addClass(selected_STR);
+                    console.log("pasa por aquiiiiiiiiiii")
                 }
             });
 
@@ -249,5 +364,4 @@ $(function () {
             $selectionBox = null;
         }
     });
-
 });
