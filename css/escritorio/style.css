@@ -169,3 +169,7 @@ body {
     margin-left: 20px;
     margin-right: 10px;
 }
+
+.esconder-en-movil {
+    display: none;
+}
