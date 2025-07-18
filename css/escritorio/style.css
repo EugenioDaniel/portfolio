@@ -53,7 +53,7 @@ body {
     height: 200px;
 }
 
-#mail-link {
+#mail-link, #linkedin-link {
     color: aqua;
 }
 
