@@ -191,7 +191,7 @@ $(function () {
     });
 
     $("#" + correo_STR).dblclick(function () {
-        window.open("mailto:eugeniodanielsanchez@gmail.com");
+        window.open("mailto:eugeni@eugeni.es");
     });
 
     $("#" + cv_STR).dblclick(function () {
