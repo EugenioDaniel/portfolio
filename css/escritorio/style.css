@@ -1,6 +1,7 @@
 :root {
     --bg_black: #2e2e2e;
     --almost_white: #ffffff;
+    --light-blue: aqua;
 }
 
 * {
@@ -51,10 +52,14 @@ body {
 #profile {
     width: 200px;
     height: 200px;
+    border-radius: 100%;
+    margin-bottom: 2rem;
+    border: 5px solid var(--light-blue);
+    padding: 10px;
 }
 
 #mail-link, #linkedin-link {
-    color: aqua;
+    color: var(--light-blue);
 }
 
 .container {
