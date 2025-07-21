@@ -63,6 +63,8 @@ body {
 }
 
 #profile {
+    cursor: none;
+    pointer-events: none;
     width: 200px;
     height: 200px;
     border-radius: 100%;
